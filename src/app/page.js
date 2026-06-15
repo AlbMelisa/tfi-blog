@@ -10,7 +10,8 @@ async function getPublicaciones() {
     const result = await query(
       "SELECT id, title AS titulo, content AS contenido, created_at AS fecha FROM posts ORDER BY created_at DESC"
     );
-    return result.rows;
+    console.log("Publicaciones cargadas:", result.rows);
+    return result.rows===null ? [] : result.rows;
   } catch (error) {
     throw new Error(
       `Error al cargar publicaciones :( : ${error?.message || String(error)}`
