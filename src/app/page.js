@@ -10,7 +10,11 @@ async function getPublicaciones() {
     );
     return result.rows;
   } catch (error) {
-    console.error("Error al cargar publicaciones:", error);
+    console.error("Error al cargar publicaciones:", {
+      message: error?.message || String(error),
+      name: error?.name || "Error",
+      stack: error?.stack,
+    });
     return null;
   }
 }
