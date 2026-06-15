@@ -3,6 +3,8 @@ import { query } from "@/lib/db";
 import CrearPostForm from "@/components/CrearPostForm";
 import PostsPagination from "@/components/PostsPagination";
 
+export const dynamic = "force-dynamic";
+
 async function getPublicaciones() {
   try {
     const result = await query(
@@ -10,12 +12,9 @@ async function getPublicaciones() {
     );
     return result.rows;
   } catch (error) {
-    console.error("Error al cargar publicaciones:", {
-      message: error?.message || String(error),
-      name: error?.name || "Error",
-      stack: error?.stack,
-    });
-    return null;
+    throw new Error(
+      `Error al cargar publicaciones :( : ${error?.message || String(error)}`
+    );
   }
 }
 
