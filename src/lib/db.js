@@ -1,12 +1,18 @@
 import { Pool } from "pg";
 
-// Configuración dinámica del Pool de conexiones con variables de entorno
+// Construir connection string prefiriendo DATABASE_URL
+const connectionString = process.env.DATABASE_URL || (() => {
+  const user = process.env.DB_USER || "postgres";
+  const password = process.env.DB_PASSWORD || "45275151";
+  const host = process.env.DB_HOST || "172.16.90.168";
+  const port = process.env.DB_PORT || "5432";
+  const database = process.env.DB_NAME || "blogdb";
+  return `postgres://${encodeURIComponent(user)}:${encodeURIComponent(password)}@${host}:${port}/${database}`;
+})();
+
+// Configuración dinámica del Pool de conexiones usando connectionString
 const pool = new Pool({
-  user: process.env.DB_USER || "postgres",
-  password: process.env.DB_PASSWORD || "45275151",
-  host: process.env.DB_HOST || "172.16.90.168",
-  port: parseInt(process.env.DB_PORT || "5432", 10),
-  database: process.env.DB_NAME || "blogdb",
+  connectionString,
 });
 
 // Reutilizar la conexión global en desarrollo
