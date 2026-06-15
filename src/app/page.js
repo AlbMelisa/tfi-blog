@@ -6,7 +6,7 @@ import PostsPagination from "@/components/PostsPagination";
 async function getPublicaciones() {
   try {
     const result = await query(
-      "SELECT id, titulo, contenido, categoria, fecha FROM publicaciones ORDER BY fecha DESC"
+      "SELECT id, title AS titulo, content AS contenido, created_at AS fecha FROM posts ORDER BY created_at DESC"
     );
     return result.rows;
   } catch (error) {
@@ -17,19 +17,17 @@ async function getPublicaciones() {
 
 async function agregarDato(formData) {
   "use server";
-
   const titulo = String(formData.get("titulo") || "").trim();
   const contenido = String(formData.get("contenido") || "").trim();
-  const categoria = String(formData.get("categoria") || "Personal").trim();
 
-  if (!titulo || !contenido || !categoria) {
-    throw new Error("Los campos título, contenido y categoría son obligatorios.");
+  if (!titulo || !contenido) {
+    throw new Error("Los campos título y contenido son obligatorios.");
   }
 
   try {
     await query(
-      "INSERT INTO publicaciones (titulo, contenido, categoria) VALUES ($1, $2, $3)",
-      [titulo, contenido, categoria]
+      "INSERT INTO posts (title, content) VALUES ($1, $2)",
+      [titulo, contenido]
     );
     revalidatePath("/");
   } catch (error) {
