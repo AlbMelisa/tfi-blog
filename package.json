@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:prod": "rm -rf .next && npm run build && node deploy-pack.js",
     "start": "next start",
     "lint": "eslint"
   },
